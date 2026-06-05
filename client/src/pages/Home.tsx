@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, ExternalLink, ArrowDown, BookOpen, Cpu, FlaskConical, Layers } from "lucide-react";
+import { Github, Linkedin, Mail, ExternalLink, ArrowDown, BookOpen, Cpu, FlaskConical, Layers, Moon, Sun, Star, Eye } from "lucide-react";
+import { useTheme } from "../contexts/ThemeContext";
 import ParticleCanvas from "../components/ParticleCanvas";
 import TypeWriter from "../components/TypeWriter";
-import AnimatedCounter from "../components/AnimatedCounter";
 import SectionReveal from "../components/SectionReveal";
 import data from "../../../portfolio-data.json";
 
@@ -13,7 +13,7 @@ function Cursor() {
   const ringRef = useRef<HTMLDivElement>(null);
   const mouse = useRef({ x: 0, y: 0 });
   const ring = useRef({ x: 0, y: 0 });
-  const raf = useRef<number>();
+  const raf = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -52,6 +52,23 @@ function Cursor() {
   );
 }
 
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  if (!toggleTheme) return null;
+  const isDark = theme === "dark";
+  return (
+    <button
+      type="button"
+      className="theme-toggle"
+      onClick={toggleTheme}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDark ? "Light mode" : "Dark mode"}
+    >
+      {isDark ? <Sun size={18} strokeWidth={2} /> : <Moon size={18} strokeWidth={2} />}
+    </button>
+  );
+}
+
 // ─── Nav ──────────────────────────────────────────────────────────
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -62,30 +79,94 @@ function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const links = ["About", "Experience", "Research", "Projects", "Skills"];
+  const links: { label: string; id: string }[] = [
+    { label: "About", id: "about" },
+    { label: "Experience", id: "experience" },
+    { label: "Research", id: "research" },
+    { label: "Projects", id: "projects" },
+    { label: "Skills", id: "skills" },
+    { label: "Credentials", id: "certifications" },
+  ];
 
   return (
     <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
       <div className="nav-inner">
         <span className="nav-logo">yousef.ammar</span>
-        <ul className="nav-links">
-          {links.map((l) => (
-            <li key={l}>
-              <a href={`#${l.toLowerCase()}`}>{l}</a>
+        <div className="nav-actions">
+          <ThemeToggle />
+          <ul className="nav-links">
+            {links.map((l) => (
+              <li key={l.id}>
+                <a href={`#${l.id}`}>{l.label}</a>
+              </li>
+            ))}
+            <li>
+              <a
+                href={`mailto:${data.profile.email}`}
+                className="btn-outline"
+                style={{ padding: "7px 18px", fontSize: "12px" }}
+              >
+                Contact
+              </a>
             </li>
-          ))}
-          <li>
-            <a
-              href={`mailto:${data.profile.email}`}
-              className="btn-outline"
-              style={{ padding: "7px 18px", fontSize: "12px" }}
-            >
-              Contact
-            </a>
-          </li>
-        </ul>
+          </ul>
+        </div>
       </div>
     </nav>
+  );
+}
+
+// ─── Hero stats ───────────────────────────────────────────────────
+function HeroStats() {
+  const stats = (data as { stats?: { value: string; label: string }[] }).stats ?? [];
+  if (!stats.length) return null;
+
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
+        gap: "12px",
+        maxWidth: "560px",
+        marginBottom: "40px",
+      }}
+    >
+      {stats.map((s) => (
+        <div
+          key={s.label}
+          className="glass-card"
+          style={{
+            padding: "14px 16px",
+            textAlign: "center",
+            background: "var(--glass-bg)",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "clamp(22px, 4vw, 28px)",
+              fontWeight: 800,
+              letterSpacing: "-0.03em",
+              color: "var(--accent-light)",
+              lineHeight: 1.1,
+            }}
+          >
+            {s.value}
+          </div>
+          <div
+            style={{
+              fontSize: "11px",
+              color: "var(--text-subtle)",
+              fontFamily: "var(--font-mono)",
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              marginTop: "4px",
+            }}
+          >
+            {s.label}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -97,10 +178,13 @@ function Hero() {
       style={{
         position: "relative",
         minHeight: "100vh",
+        boxSizing: "border-box",
+        paddingTop: "clamp(5.75rem, 12svh, 8.5rem)",
+        paddingBottom: "clamp(2rem, 6svh, 4rem)",
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        background: "radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99,102,241,0.12) 0%, transparent 70%)",
+        background: "var(--hero-bg-gradient)",
       }}
     >
       <ParticleCanvas />
@@ -113,7 +197,7 @@ function Hero() {
           transform: "translate(-50%, -50%)",
           width: "600px",
           height: "600px",
-          background: "radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 70%)",
+          background: "var(--hero-orb)",
           pointerEvents: "none",
         }}
       />
@@ -124,22 +208,6 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "12px",
-              color: "var(--accent)",
-              letterSpacing: "0.15em",
-              marginBottom: "20px",
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
-            <span className="dot-live" />
-            <span>AVAILABLE FOR OPPORTUNITIES</span>
-          </div>
-
           <h1
             style={{
               fontSize: "clamp(48px, 8vw, 88px)",
@@ -166,7 +234,7 @@ function Hero() {
                 "Arabic NLP Engineer",
                 "XAI Researcher",
                 "Production ML Systems",
-                "AI Engineer @ Moasherat",
+                "AI Engineer @ Moasherat + Qanoniah",
               ]}
               className="gradient-text"
             />
@@ -181,9 +249,10 @@ function Hero() {
               marginBottom: "40px",
             }}
           >
-            Building deterministic, privacy-preserving ML systems in Arabic NLP.
-            3rd year Data Science @ UQU · GPA 3.92 · 2 concurrent AI roles · Active researcher.
+            {data.profile.subtitle}. 3rd year Data Science @ UQU · GPA {data.profile.gpa.split(" /")[0]} · Active IEEE Access research.
           </p>
+
+          <HeroStats />
 
           <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "56px" }}>
             <a href="#projects" className="btn-primary">
@@ -194,6 +263,14 @@ function Hero() {
             </a>
             <a href={data.profile.linkedin} target="_blank" rel="noopener noreferrer" className="btn-outline">
               <Linkedin size={15} /> LinkedIn
+            </a>
+            <a
+              href={(data.profile as { huggingface?: string }).huggingface ?? "https://huggingface.co/Ysfxjo"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline"
+            >
+              <span style={{ fontSize: "13px", fontWeight: 700 }}>🤗</span> Hugging Face
             </a>
           </div>
 
@@ -220,27 +297,13 @@ function Hero() {
 }
 
 // ─── About ────────────────────────────────────────────────────────
-const stats = [
-  { value: 392, suffix: "/400", label: "GPA", prefix: "" },
-  { value: 2, suffix: " roles", label: "Concurrent AI positions", prefix: "" },
-  { value: 100, suffix: "k", label: "Dataset samples", prefix: "" },
-  { value: 21, suffix: " y/o", label: "Age — production systems", prefix: "" },
-];
-
 function About() {
   return (
     <section id="about" className="section">
       <div className="container">
         <div className="divider" style={{ marginBottom: "96px" }} />
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
-            gap: "48px",
-            alignItems: "center",
-          }}
-        >
-          <SectionReveal direction="left">
+        <SectionReveal direction="left">
+          <div style={{ maxWidth: "720px" }}>
             <div className="section-label">About</div>
             <h2 className="section-title">Who I Am</h2>
             <p style={{ color: "var(--text-muted)", lineHeight: 1.9, marginBottom: "20px" }}>
@@ -256,32 +319,8 @@ function About() {
                 <span className="tag" key={t}>{t}</span>
               ))}
             </div>
-          </SectionReveal>
-
-          <SectionReveal direction="right" delay={0.1}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-              {stats.map((s, i) => (
-                <motion.div
-                  key={s.label}
-                  className="glass-card"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08, duration: 0.4 }}
-                  style={{ padding: "28px 24px" }}
-                >
-                  <div
-                    style={{ fontSize: "36px", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: "6px" }}
-                    className="gradient-text"
-                  >
-                    <AnimatedCounter to={s.value} suffix={s.suffix} prefix={s.prefix} />
-                  </div>
-                  <div style={{ fontSize: "12px", color: "var(--text-subtle)", lineHeight: 1.4 }}>{s.label}</div>
-                </motion.div>
-              ))}
-            </div>
-          </SectionReveal>
-        </div>
+          </div>
+        </SectionReveal>
       </div>
     </section>
   );
@@ -410,8 +449,8 @@ function Research() {
             className="glass-card"
             style={{
               padding: "48px",
-              background: "linear-gradient(135deg, rgba(99,102,241,0.08) 0%, var(--surface) 60%)",
-              border: "1px solid rgba(99,102,241,0.25)",
+              background: "var(--research-panel-bg)",
+              border: "1px solid var(--research-panel-border)",
               marginTop: "32px",
               position: "relative",
               overflow: "hidden",
@@ -425,7 +464,7 @@ function Research() {
                 width: "280px",
                 height: "280px",
                 borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)",
+                background: "var(--research-highlight-orb)",
                 pointerEvents: "none",
               }}
             />
@@ -475,72 +514,110 @@ const statusConfig: Record<string, { dot: string; label: string }> = {
   Research:   { dot: "dot-active",   label: "Research"            },
 };
 
-const projectLinks: Record<string, { github?: string; live?: string }> = {
-  "Arabic Complaint Classification API": {
-    github: "https://github.com/YOUSEF-ysfxjo/text-complaint-api",
-  },
-  "AI Family Matching System": {
-    github: "https://github.com/YOUSEF-ysfxjo/family-system",
-  },
-  "Interpretable Cardiology Risk Model": {
-    github: "https://github.com/YOUSEF-ysfxjo/ml-cs-stats-interpretability-",
-  },
-  "Bella — Personal AI Agent System": {
-    github: "https://github.com/YOUSEF-ysfxjo",
-  },
-  "Arabic Embedding Model Evaluation": {
-    github: "https://github.com/YOUSEF-ysfxjo",
-  },
-  "Arabic Legal Corpus Extraction": {
-    github: "https://github.com/YOUSEF-ysfxjo",
-  },
-  "Umrah Pilgrim Permit Extractor": {
-    github: "https://github.com/YOUSEF-ysfxjo",
-  },
-  "NLP Learning Guide + Coffee Flavor Map": {
-    github: "https://github.com/YOUSEF-ysfxjo/ml-nlp-guide",
-    live:   "https://ml-nlp-guide.netlify.app",
-  },
+type PortfolioProject = (typeof data.projects)[number] & {
+  featured?: boolean;
+  github?: string;
+  live?: string;
+  platform?: string;
+  highlights?: string[];
 };
 
+const PROJECT_FILTERS = ["All", "Featured", "Production", "Research"] as const;
+type ProjectFilter = (typeof PROJECT_FILTERS)[number];
+
 function Projects() {
+  const [filter, setFilter] = useState<ProjectFilter>("All");
+
+  const projects = [...(data.projects as PortfolioProject[])].sort(
+    (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured))
+  );
+
+  const filtered = projects.filter((p) => {
+    if (filter === "All") return true;
+    if (filter === "Featured") return Boolean(p.featured);
+    if (filter === "Production") return p.status === "Production" || p.status === "Live";
+    if (filter === "Research") return p.status === "Research";
+    return true;
+  });
+
   return (
     <section id="projects" className="section" style={{ background: "var(--surface)" }}>
       <div className="container">
         <SectionReveal>
           <div className="section-label">Projects</div>
           <h2 className="section-title">What I've Built</h2>
-          <p className="section-subtitle" style={{ marginBottom: "48px" }}>
-            Production systems, research tools, and applied ML — Arabic NLP and XAI at the core.
+          <p className="section-subtitle" style={{ marginBottom: "28px" }}>
+            17 public repos — production APIs, RAG systems, XAI research, and open-source tools.
           </p>
         </SectionReveal>
 
+        <SectionReveal delay={0.05}>
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "36px" }}>
+            {PROJECT_FILTERS.map((f) => (
+              <button
+                key={f}
+                type="button"
+                onClick={() => setFilter(f)}
+                style={{
+                  padding: "7px 14px",
+                  fontSize: "12px",
+                  fontFamily: "var(--font-mono)",
+                  letterSpacing: "0.04em",
+                  borderRadius: "var(--radius-sm)",
+                  border: `1px solid ${filter === f ? "var(--accent)" : "var(--border)"}`,
+                  background: filter === f ? "var(--accent-dim)" : "transparent",
+                  color: filter === f ? "var(--accent-light)" : "var(--text-subtle)",
+                  transition: "all 0.2s",
+                }}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+        </SectionReveal>
+
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "20px" }}>
-          {data.projects.map((p, i) => {
+          {filtered.map((p, i) => {
             const sc = statusConfig[p.status] ?? { dot: "dot-active", label: p.status };
-            const links = projectLinks[p.name] ?? {};
             return (
               <SectionReveal key={p.name} delay={i * 0.07}>
                 <motion.div
                   className="glass-card"
-                  whileHover={{ y: -4, boxShadow: "0 0 40px rgba(99,102,241,0.18)" }}
-                  style={{ padding: "28px", height: "100%", display: "flex", flexDirection: "column", gap: "16px" }}
+                  whileHover={{ y: -4, boxShadow: "var(--card-hover-glow)" }}
+                  style={{
+                    padding: "28px",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "14px",
+                    border: p.featured ? "1px solid var(--border-hover)" : undefined,
+                  }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
                       <span className={sc.dot} />
                       <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-subtle)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
                         {sc.label}
                       </span>
+                      {p.featured && (
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "10px", color: "#f59e0b", fontFamily: "var(--font-mono)" }}>
+                          <Star size={10} fill="#f59e0b" /> PINNED
+                        </span>
+                      )}
+                      {p.platform && (
+                        <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-subtle)" }}>
+                          · {p.platform}
+                        </span>
+                      )}
                     </div>
                     <div style={{ display: "flex", gap: "10px" }}>
-                      {links.github && (
-                        <a href={links.github} target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-subtle)", transition: "color 0.2s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text)")} onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-subtle)")}>
+                      {p.github && (
+                        <a href={p.github} target="_blank" rel="noopener noreferrer" title="View on GitHub" style={{ color: "var(--text-subtle)", transition: "color 0.2s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text)")} onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-subtle)")}>
                           <Github size={16} />
                         </a>
                       )}
-                      {links.live && (
-                        <a href={links.live} target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-subtle)", transition: "color 0.2s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent-light)")} onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-subtle)")}>
+                      {p.live && (
+                        <a href={p.live} target="_blank" rel="noopener noreferrer" title="Live demo" style={{ color: "var(--text-subtle)", transition: "color 0.2s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent-light)")} onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-subtle)")}>
                           <ExternalLink size={16} />
                         </a>
                       )}
@@ -551,7 +628,17 @@ function Projects() {
                     <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "8px", lineHeight: 1.3, color: "var(--text)" }}>
                       {p.name}
                     </h3>
-                    <p style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.7 }}>{p.description}</p>
+                    <p style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.7, marginBottom: "12px" }}>{p.description}</p>
+                    {p.highlights && p.highlights.length > 0 && (
+                      <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
+                        {p.highlights.slice(0, 2).map((h) => (
+                          <li key={h} style={{ fontSize: "12px", color: "var(--text-subtle)", lineHeight: 1.6, paddingLeft: "12px", position: "relative" }}>
+                            <span style={{ position: "absolute", left: 0, top: "7px", width: "3px", height: "3px", borderRadius: "50%", background: "var(--accent)" }} />
+                            {h}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
 
                   <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
@@ -562,6 +649,21 @@ function Projects() {
             );
           })}
         </div>
+
+        <SectionReveal delay={0.2}>
+          <div style={{ textAlign: "center", marginTop: "40px" }}>
+            <a
+              href={data.profile.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline"
+              style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}
+            >
+              <Github size={15} />
+              View all 17 public repos on GitHub
+            </a>
+          </div>
+        </SectionReveal>
       </div>
     </section>
   );
@@ -572,10 +674,11 @@ function Skills() {
   const s = data.skills as Record<string, string[]>;
 
   const groups = [
-    { icon: <Cpu size={16} />,         label: "ML & NLP",       keys: ["ml_nlp"] },
-    { icon: <FlaskConical size={16} />, label: "XAI & Research", keys: ["xai", "federated_ml"] },
-    { icon: <Layers size={16} />,       label: "Infrastructure", keys: ["infrastructure"] },
-    { icon: <BookOpen size={16} />,     label: "Specialties",    keys: ["specialties"] },
+    { icon: <Cpu size={16} />,         label: "ML & NLP",        keys: ["ml_nlp"] },
+    { icon: <FlaskConical size={16} />, label: "XAI & FL",        keys: ["xai", "federated_ml"] },
+    { icon: <Eye size={16} />,         label: "Vision & OCR",    keys: ["vision_ocr"] },
+    { icon: <Layers size={16} />,       label: "Infrastructure",  keys: ["infrastructure", "agents"] },
+    { icon: <BookOpen size={16} />,     label: "Specialties",     keys: ["specialties"] },
   ];
 
   return (
@@ -642,7 +745,7 @@ function Certifications() {
             return (
               <SectionReveal key={i} delay={i * 0.04}>
                 <div
-                  style={{ display: "flex", alignItems: "flex-start", gap: "14px", padding: "14px 18px", background: "rgba(20,20,36,0.6)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border)", transition: "border-color 0.2s" }}
+                  style={{ display: "flex", alignItems: "flex-start", gap: "14px", padding: "14px 18px", background: "var(--cert-row-bg)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border)", transition: "border-color 0.2s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--border-hover)")}
                   onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
                 >
@@ -677,7 +780,7 @@ function Footer() {
             {[
               { href: data.profile.github,   icon: <Github size={15} />,   label: "GitHub"      },
               { href: data.profile.linkedin,  icon: <Linkedin size={15} />, label: "LinkedIn"    },
-              { href: "https://huggingface.co/Ysfxjo", icon: null,          label: "HuggingFace" },
+              { href: (data.profile as { huggingface?: string }).huggingface ?? "https://huggingface.co/Ysfxjo", icon: null, label: "HuggingFace" },
               { href: `mailto:${data.profile.email}`,  icon: <Mail size={15} />, label: "Email"  },
             ].map((l) => (
               <a

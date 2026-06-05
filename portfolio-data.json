@@ -1,19 +1,26 @@
 {
   "profile": {
     "name": "Yousef Ammar Abdullah",
-    "title": "AI Engineer & Data Scientist",
-    "subtitle": "Building production ML systems with Arabic NLP, Explainable AI, and privacy-preserving technologies",
+    "title": "AI & ML Engineer",
+    "subtitle": "Arabic NLP, Explainable AI, and production-ready ML systems",
     "email": "yousefammarabdullah.a@gmail.com",
     "phone": "0509610800",
-    "github": "https://github.com/YOUSEF-ysfxjo",
+    "github": "https://github.com/yousef0852",
     "linkedin": "https://www.linkedin.com/in/yousef-ammar-6351a9325/",
+    "huggingface": "https://huggingface.co/Ysfxjo",
     "location": "Makkah, Saudi Arabia",
     "gpa": "3.92 / 4.00",
     "university": "Umm Al-Qura University (UQU)",
     "graduationYear": "2027",
     "year": "3rd year"
   },
-  "about": "AI Engineer and Data Science undergraduate (3rd year, GPA 3.92) specializing in Arabic NLP, Explainable AI, and production ML systems. Currently holding two concurrent AI roles while conducting active research on XAI and Federated Learning. Builds deterministic, privacy-preserving ML systems deployed in production.",
+  "stats": [
+    { "value": "17", "label": "Public Repos" },
+    { "value": "8+", "label": "Production Systems" },
+    { "value": "2", "label": "Concurrent AI Roles" },
+    { "value": "3.92", "label": "GPA @ UQU" }
+  ],
+  "about": "AI & ML engineer specializing in Arabic NLP, Explainable AI, and production ML systems. Currently holding two concurrent AI roles at Qanoniah (legal tech) and Moasherat while conducting active research on XAI and Federated Learning. I build deterministic, privacy-preserving systems — LLMs explain, never decide.",
   "experience": [
     {
       "role": "Data Scientist Intern",
@@ -24,7 +31,8 @@
         "Built Arabic legal corpus extraction pipeline: scraped and structured 500+ Saudi law documents from Bawabah Al-Bahth, exported to JSONL with metadata for NLP evaluation",
         "Evaluated Arabic embedding models using MTEB leaderboard — filtered 2024–2026 releases, scored by Arabic retrieval benchmarks, produced ranked shortlist for production use",
         "Built OCR pipeline using AlOCR API with Arabic text normalization and WER/CER evaluation metrics",
-        "Developed Balsam leaderboard scraper as a FastAPI service with 1-hour cache and fallback"
+        "Developed Balsam leaderboard scraper as a FastAPI service with 1-hour cache and fallback",
+        "Shipped legal-rag-api: RAG over Saudi law with E5 + Qdrant, cited grounded answers, graceful degradation without LLM"
       ]
     },
     {
@@ -62,99 +70,156 @@
     {
       "name": "Arabic Complaint Classification API",
       "status": "Production",
+      "featured": true,
       "platform": "Railway",
-      "description": "MARBERT-based FastAPI service: sentiment, topic, and action classification on Arabic complaints",
+      "description": "3 MARBERT models classify sentiment, topic, and action on Arabic complaints. A rule engine decides — the LLM only explains.",
       "highlights": [
-        "Deterministic routing engine with optional LLM explanation layer — LLM explains, never decides",
-        "Docker deployment on Railway with pytest suite and mocked model tests"
+        "Deterministic routing engine with optional LLM explanation layer",
+        "FastAPI + Docker on Railway with pytest suite and Next.js demo UI"
       ],
-      "tags": ["FastAPI", "MARBERT", "Arabic NLP", "Production ML"]
+      "tags": ["FastAPI", "MARBERT", "Arabic NLP", "Docker", "Railway"],
+      "github": "https://github.com/yousef0852/arabic-complaint-classification-api"
+    },
+    {
+      "name": "Legal RAG API",
+      "status": "Production",
+      "featured": true,
+      "description": "Ask Saudi law in Arabic — RAG over legal documents with E5 embeddings + Qdrant, returning cited grounded answers.",
+      "highlights": [
+        "Semantic retrieval with citation-backed responses in Arabic",
+        "Degrades gracefully without an LLM — retrieval-only mode still works"
+      ],
+      "tags": ["RAG", "Qdrant", "E5", "Arabic NLP", "FastAPI", "Docker"],
+      "github": "https://github.com/yousef0852/legal-rag-api"
     },
     {
       "name": "AI Family Matching System",
       "status": "Finalist",
+      "featured": true,
       "platform": "Social Development Innovation Hackathon",
-      "description": "Privacy-preserving face similarity matching with explainable AI",
+      "description": "Privacy-preserving face resemblance matching — which child most resembles these parents?",
       "highlights": [
-        "Privacy-preserving face similarity: InsightFace embeddings + FAISS vector search (no raw images stored)",
-        "106-point landmark XAI: per-region similarity scores (jaw, nose, eyes) for transparent matching",
-        "FastAPI microservice + Docker, deployed as part of finalist submission"
+        "InsightFace embeddings + FAISS search — no raw photos stored",
+        "106-point landmark XAI with per-region similarity scores (jaw, nose, eyes)"
       ],
-      "tags": ["Computer Vision", "XAI", "Privacy", "FastAPI"]
+      "tags": ["Computer Vision", "XAI", "Privacy", "InsightFace", "FastAPI"],
+      "github": "https://github.com/yousef0852/family-system"
     },
     {
       "name": "Interpretable Cardiology Risk Model",
       "status": "Research",
-      "description": "Integrated Classical Statistics, Bayesian inference, and XAI",
+      "featured": true,
+      "description": "Why an 85%-accurate model catches only 6% of heart-disease cases — classical stats vs ML vs SHAP & Bayesian.",
       "highlights": [
-        "Integrated Classical Statistics (Odds Ratios), Bayesian inference (PyMC), and XAI (SHAP)",
-        "Subgroup analysis by gender and age group; handled class imbalance and VIF multicollinearity"
+        "Integrated Odds Ratios, PyMC Bayesian inference, and SHAP explainability",
+        "Subgroup analysis by gender and age; handled class imbalance and VIF multicollinearity"
       ],
-      "tags": ["Healthcare", "Bayesian ML", "XAI", "PyMC"]
+      "tags": ["Healthcare", "Bayesian ML", "SHAP", "PyMC", "XAI"],
+      "github": "https://github.com/yousef0852/cardiology-risk-xai"
     },
     {
-      "name": "Bella — Personal AI Agent System",
+      "name": "GitHub Cleaner",
+      "status": "Live",
+      "featured": true,
+      "platform": "Render",
+      "description": "Scores your GitHub repos 0–100 and tells you what to showcase, fix, or archive — with a remediation plan.",
+      "highlights": [
+        "FastAPI service analyzing repo health, README quality, and activity signals",
+        "Deployed on Render with actionable scoring breakdown"
+      ],
+      "tags": ["FastAPI", "GitHub API", "Developer Tools", "Render"],
+      "github": "https://github.com/yousef0852/github_cleaner"
+    },
+    {
+      "name": "Research Harvester",
+      "status": "Production",
+      "featured": true,
+      "description": "Personal arXiv engine — harvest papers, vector-index them, then search and ask questions over your own corpus.",
+      "highlights": [
+        "FastAPI pipeline with Qdrant vector store and MinIO object storage",
+        "Automated paper ingestion, embedding, and semantic search"
+      ],
+      "tags": ["FastAPI", "Qdrant", "arXiv", "Vector DB", "Docker"],
+      "github": "https://github.com/yousef0852/research-harvester"
+    },
+    {
+      "name": "Bella — Personal AI Agent",
       "status": "Active",
-      "description": "Multi-tool AI agent with persistent memory and tiered model routing",
+      "description": "FastMCP server connecting Notion, GitHub, Calendar, Obsidian, and web — with write-aware caching and a dashboard UI.",
       "highlights": [
-        "Multi-tool AI agent: FastMCP server with Notion, GitHub, Obsidian wiki, filesystem, shell, and web access",
-        "Persistent memory across sessions, tiered model routing (GPT-4.1 / Claude Sonnet), Docker Compose"
+        "Multi-tool agent with persistent memory and tiered model routing",
+        "Docker Compose deployment with dashboard for session management"
       ],
-      "tags": ["AI Agents", "FastMCP", "Docker", "LLM"]
+      "tags": ["AI Agents", "FastMCP", "MCP", "Notion", "Docker"],
+      "github": "https://github.com/yousef0852/bella-dashboard"
     },
     {
-      "name": "Arabic Embedding Model Evaluation",
-      "status": "Research",
-      "platform": "Qanoniah — Legal Tech",
-      "description": "MTEB-based evaluation pipeline to shortlist Arabic embedding models for legal NLP production use",
+      "name": "Papers Agent — AI Mind",
+      "status": "Active",
+      "description": "Personal timeline graph for learning AI history through conversation and papers.",
       "highlights": [
-        "Filtered MTEB 2024–2026 Arabic models by retrieval benchmarks; ranked candidates for production use",
-        "Automated extraction script pulling model metadata, scores, and release dates from MTEB leaderboard"
+        "Interactive knowledge graph of AI milestones from 1943 to present",
+        "Bilingual (Arabic/English) node labels with category-based layout"
       ],
-      "tags": ["Embeddings", "MTEB", "Arabic NLP", "Evaluation"]
+      "tags": ["Knowledge Graph", "AI History", "React", "FastAPI"],
+      "github": "https://github.com/yousef0852/papers-agent"
     },
     {
-      "name": "Arabic Legal Corpus Extraction",
-      "status": "Research",
-      "platform": "Qanoniah — Legal Tech",
-      "description": "End-to-end pipeline extracting and structuring Saudi legal documents for Arabic NLP benchmarking",
+      "name": "ML & NLP Learning Guide",
+      "status": "Live",
+      "platform": "ml-nlp-guide.netlify.app",
+      "description": "The embeddings → transformers story — Word2Vec, GloVe, FastText with an interactive site and paper-reading roadmap.",
       "highlights": [
-        "Scraped and structured 500+ Saudi law documents from Bawabah Al-Bahth into a JSONL corpus with metadata",
-        "Built question generation pipeline and viewer for human annotation and NLP benchmark construction"
+        "Interactive learning site with comparative embedding visualizations",
+        "Coffee Flavor Map: Word2Vec vs GloVe vs FastText on the same corpus"
       ],
-      "tags": ["Legal NLP", "Data Pipeline", "Arabic NLP", "Benchmark"]
+      "tags": ["NLP", "Word Embeddings", "Education", "Visualization"],
+      "github": "https://github.com/yousef0852/ml-nlp-guide",
+      "live": "https://ml-nlp-guide.netlify.app"
     },
     {
       "name": "Umrah Pilgrim Permit Extractor",
       "status": "Production",
       "platform": "Moasherat",
-      "description": "OCR-based FastAPI service extracting structured data from Arabic Umrah permit images",
+      "description": "OCR-based FastAPI service extracting structured data from Arabic Umrah permit images.",
       "highlights": [
-        "PaddleOCR Arabic engine + structured field parser extracting name, nationality, permit ID, and dates",
-        "FastAPI service with warm-up model loading, CORS support, and image preprocessing via OpenCV"
+        "PaddleOCR Arabic engine + structured field parser for name, nationality, permit ID, dates",
+        "Warm-up model loading, CORS support, and OpenCV image preprocessing"
       ],
       "tags": ["PaddleOCR", "Arabic OCR", "FastAPI", "Computer Vision"]
     },
     {
-      "name": "NLP Learning Guide + Coffee Flavor Map",
-      "status": "Live",
-      "platform": "ml-nlp-guide.netlify.app",
-      "description": "Comparative study of Word2Vec, GloVe, FastText on specialty coffee corpus",
+      "name": "Arabic Legal Corpus & Embedding Evaluation",
+      "status": "Research",
+      "platform": "Qanoniah — Legal Tech",
+      "description": "End-to-end pipeline extracting Saudi legal documents and benchmarking Arabic embedding models via MTEB.",
       "highlights": [
-        "Comparative study of Word2Vec, GloVe, FastText on a specialty coffee flavor corpus",
-        "Published interactive visualization"
+        "500+ Saudi law documents structured into JSONL corpus with metadata",
+        "MTEB-based evaluation shortlisting 2024–2026 Arabic embedding models for production"
       ],
-      "tags": ["NLP", "Word Embeddings", "Visualization"]
+      "tags": ["Legal NLP", "MTEB", "Embeddings", "Arabic NLP", "Benchmark"]
+    },
+    {
+      "name": "Weekly Tasks Reporter",
+      "status": "Active",
+      "description": "Pulls tasks from a Notion database and generates weekly reports with completion, effort, and blocker tracking.",
+      "highlights": [
+        "Automated Markdown + HTML report generation from Notion API",
+        "Tracks completion rates, effort distribution, and blockers over time"
+      ],
+      "tags": ["Notion API", "Python", "Automation", "Productivity"],
+      "github": "https://github.com/yousef0852/weekly-tasks-script"
     }
   ],
   "skills": {
-    "programming": ["Python", "JavaScript", "HTML/CSS"],
-    "ml_nlp": ["HuggingFace Transformers", "MARBERT", "AraBERT", "Scikit-learn", "PyTorch", "gensim (Word2Vec, FastText, GloVe)"],
+    "programming": ["Python", "TypeScript", "JavaScript", "HTML/CSS"],
+    "ml_nlp": ["HuggingFace Transformers", "MARBERT", "AraBERT", "Scikit-learn", "PyTorch", "gensim (Word2Vec, FastText, GloVe)", "E5 Embeddings"],
     "xai": ["SHAP", "LIME", "Global and local explainability"],
     "federated_ml": ["FedAvg", "Custom sequential FL simulation", "IID vs non-IID data distribution analysis"],
-    "vision_ocr": ["InsightFace", "PaddleOCR", "OpenCV", "DeepFace", "FAISS", "PyMC", "imbalanced-learn"],
-    "infrastructure": ["FastAPI", "Docker", "Railway", "Render", "PostgreSQL", "Git/GitHub"],
-    "specialties": ["Arabic NLP", "Explainable AI", "Federated Learning", "Production ML Systems", "Privacy-by-Design"]
+    "vision_ocr": ["InsightFace", "PaddleOCR", "OpenCV", "DeepFace", "FAISS"],
+    "infrastructure": ["FastAPI", "Docker", "Railway", "Render", "Netlify", "PostgreSQL", "Qdrant", "MinIO", "Git/GitHub"],
+    "agents": ["FastMCP", "MCP", "RAG pipelines", "LLM orchestration"],
+    "specialties": ["Arabic NLP", "Explainable AI", "Federated Learning", "Production ML Systems", "Privacy-by-Design", "Legal Tech"]
   },
   "certifications": [
     "Advanced AI Course (40h — Computer Vision) – KAUST Academy @ UQU (Feb 2026)",

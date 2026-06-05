@@ -22,8 +22,8 @@ Personal portfolio website built with React, Vite, TypeScript, Tailwind CSS, and
 ### 1) Clone
 
 ```bash
-git clone https://github.com/YOUSEF-ysfxjo/yousef-protofolio.git
-cd yousef-protofolio
+git clone https://github.com/yousef0852/yousef-portfolio.git
+cd yousef-portfolio
 ```
 
 ### 2) Install dependencies
