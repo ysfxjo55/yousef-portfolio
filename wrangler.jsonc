@@ -1,0 +1,10 @@
+{
+  // Cloudflare Workers config: serves the built site (dist/public) as static files.
+  // The name must match the Worker in the Cloudflare dashboard.
+  "name": "yousef-lab-preview",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist/public",
+    "not_found_handling": "single-page-application"
+  }
+}
