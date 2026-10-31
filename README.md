@@ -17,6 +17,18 @@ Personal portfolio website built with React, Vite, TypeScript, Tailwind CSS, and
 - `shared/` - Shared constants and shared logic
 - `dist/` - Production build output (generated)
 
+## Yousef's Lab (redesign)
+
+The homepage is a research desk: clickable objects open project panels. Presentation and content are separate.
+
+- `client/src/content/profile.ts`: roles, dates, education, skills, publication. Verified against the CV. Edit here when the CV changes.
+- `client/src/content/projects.ts`: project write-ups, project list, connection map. Verified facts only.
+- `client/src/content/demoData.ts`: **fictional** demo data (sessions, permit, analytics numbers, legal text, cardiology cases). Everything here is labelled as fictional in the UI.
+- `client/src/lab/`: components (`desk/` objects, `panel/` panels, `demos/`, `hooks.ts`, `usePanelRouter.ts`, `lab.css`).
+- `client/public/Yousef_Ammar_Resume.pdf`: CV download. Replace the file to update it.
+- Panels have URLs: `/#agents`, `/#about`, `/#research`, `/#contact`, `/#all`, `/#connections`, `/#ocr`, `/#analytics`, `/#complaint`, `/#legal`, `/#cardio`. Old anchors (`#projects`, `#experience`, `#skills`, `#certifications`) open the closest panel.
+- Checks: `npm run check` (types), `npm test` (content and URL tests), `npm run build`.
+
 ## Getting Started
 
 ### 1) Clone
